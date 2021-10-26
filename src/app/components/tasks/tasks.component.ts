@@ -10,7 +10,7 @@ import { Task } from 'src/app/Task';
 })
 export class TasksComponent implements OnInit {
   tasks: Task[] = []
-  
+
   constructor(private taskService: TaskService) { }
 
   ngOnInit(): void {
@@ -18,17 +18,21 @@ export class TasksComponent implements OnInit {
       .subscribe((tasks) => this.tasks = tasks )
   }
 
-  deleteTask(task: Task) {
-    this.taskService.
-      deleteTask(task)
-        .subscribe(() => (this.tasks = this.tasks.filter(
-          t => t.id !== task.id)))
+  deleteTask(task: Task): void {
+    this.taskService.deleteTask(task)
+      .subscribe(() => this.tasks = this.tasks.filter(t => t.id !== task.id))
   }
 
-  toggleReminder(task: Task) {
+  toggleReminder(task: Task): void {
     task.reminder = !task.reminder
-    console.log(task.reminder);
-    
+    this.taskService.updateTaskReminder(task)
+      .subscribe()
+  }
+
+  addTask(task: Task): void {
+    this.taskService.addTask(task)
+      .subscribe((task) => (this.tasks.push(task)))
+
   }
 
 }
